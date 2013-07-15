@@ -241,7 +241,7 @@ More information on how to use php-memcached can be found on [php.net](http://ph
 Java
 ----
 
-In thi short example we will show you how to integrate your Java application with Memcachier Add-on. We will use `spymemcached` library with SASL authentication support. To use it in your project, just specify additional dependency in your `pom.xml` file:
+In this short example we will show you how to integrate your Java application with Memcachier Add-on. We will use `spymemcached` library with SASL authentication support. To use it in your project, just specify additional dependency in your `pom.xml` file:
 
 ~~~xml
 ...
