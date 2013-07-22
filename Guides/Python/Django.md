@@ -1,12 +1,12 @@
 # Deploying a Django application
 
-In this tutorial we're going to show you how to deploy a Django application on [cloudControl]. You can find the complete [source code][example-app] of the application on Github, which is the official [Django tutorial]. The application allows to create, use and manage simple polls.
+In this tutorial we're going to show you how to deploy a Django application on [cloudControl]. You can find the [source code on Github][example-app] and check out the [Python buildpack][python buildpack] for supported features. It is the official [Django tutorial]. The application allows to create, use and manage simple polls.
 
 ## The Django application explained
 
 ### Get the App
 
-First, clone the Django application from our repository:
+First, clone the Django application from our repository on Github:
 
 ~~~bash
 $ git clone git://github.com/cloudControl/python-django-example-app.git
@@ -27,9 +27,7 @@ Prepare the database by running:
 $ python manage.py syncdb
 ~~~
 
-When asked, create an admin user.
-
-Finally, run the server locally to make sure that the app is working:
+When asked, create an admin user. Finally, run the server locally to make sure that the app is working:
 
 ~~~bash
 $ python manage.py runserver
@@ -37,9 +35,9 @@ $ python manage.py runserver
 
 Now you can access [/polls](http://localhost:8000/polls/) or [/admin](http://localhost:8000/admin/) to test the app locally. It's time to prepare it for deployment on our platform.
 
-### Managing dependencies
+### Dependency Tracking
 
-The [python buildpack] uses [pip] to manage dependencies. Create a `requirements.txt` file with the following content:
+The Python buildpack tracks dependencies via [pip] and the `requirements.txt` file. It needs to be placed in the root directory of your repository. Create a `requirements.txt` file with the following content:
 
 ~~~
 Django==1.4.3
@@ -63,7 +61,7 @@ INSTALLED_APPS = (
 )
 ~~~
 
-### Defining the process type
+### Process Type Definition
 
 cloudControl uses a [Procfile] to know how to start your processes. Create a file called `Procfile` with the following content:
 
@@ -71,7 +69,7 @@ cloudControl uses a [Procfile] to know how to start your processes. Create a fil
 web: python manage.py run_gunicorn -b 0.0.0.0:$PORT
 ~~~
 
-The `web` process type is required and specifies the command that will be executed when the app is deployed.
+Left from the colon we specified the **required** process type called `web` followed by the command that starts the app and listens on the port specified by the environment variable `$PORT`.
 
 ### Production database
 
