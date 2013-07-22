@@ -69,8 +69,12 @@ Go to the application context configuration file `src/main/resources/META-INF/sp
 
 ###Adjust Logger Configuration
 
-Logging to a file is not recommended since the container's [file system] is not persistent. The default logger configuration - `src/main/resources/log4j.properties` should be modified to log either to `stdout/stderr` or `syslog`. Then cloudcontrol can  pick up all the messages and provide them to you via the [log command].
-
+Logging to a file is not recommended since the container's [file system] is not
+persistent. The default logger configuration -
+`src/main/resources/log4j.properties` should be modified to log either to
+`stdout/stderr` or `syslog`. Then cloudcontrol can  pick up all the messages
+and provide them to you via the [log command]. This is an example of how the
+configuration should look like:
 ~~~xml
 log4j.rootLogger=DEBUG, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
