@@ -511,7 +511,7 @@ Changes to DNS can take up to 24 hours until they have effect. Please refer to t
  * You can scale up or down anytime by adding more containers (horizontal scaling) or changing the container size (vertical scaling).
  * Use performance monitoring and load testing to determine the optimal scaling settings for your app.
 
-When scaling your apps you have two options. You can either scale horizontally by adding more containers, or scale vertically by changing the container size. When you scale horizontally the cloudControl loadbalancing and [routing tier](#routing-tier) ensures efficient distribution of incoming requests accross all available containers.
+When scaling your apps you have two options. You can either scale horizontally by adding more containers, or scale vertically by changing the container size. When you scale horizontally the cloudControl load balancing and [routing tier](#routing-tier) ensures efficient distribution of incoming requests accross all available containers.
 
 ### Horizontal Scaling
 
@@ -570,25 +570,25 @@ After you have reduced the total number of requests it's recommended to cache as
 
 #### Caching Proxy
 
-The loadbalancing and routing tier that is in front of all deployments includes a [Varnish] caching proxy. To have your requests cached directly in Varnish and speed up the response time through this, ensure you have set correct cache control headers for the request. Also ensure, that the request does not include a cookie. Cookies are often used to keep state accross requests (e.g. if a user is logged in). To avoid caching responses for logged in users and returning them to other users Varnish is configured to never cache requests with cookies. To be able to cache requests in Varnish for apps that rely on cookies we recommend using a cookieless domain.
+The loadbalancing and routing tier that is in front of all deployments includes a [Varnish] caching proxy. To have your requests cached directly in Varnish and speed up the response time through this, ensure you have set correct cache control headers for the request. Also ensure, that the request does not include a cookie. Cookies are often used to keep state accross requests (e.g. if a user is logged in). To avoid caching responses for logged in users and returning them to other users, Varnish is configured to never cache requests with cookies. We recommend having another 'cookieless' domain to be able to cache requests in Varnish for apps that rely on cookies.
 
 You can check if a request was cached in Varnish by checking the response's *X-varnish-cache* header. The value HIT means the respons was answered directly from the cache, and MISS means it was not.
 
 #### In-Memory Caching
 
-To make requests that can't use a cookieless domain faster you can use in memory caching to store arbitrary data from database query results to complete http responses. Since the cloudControl routing tier distributes requests accross all available containers it is recommended to cache data in a way that makes it available also for requests that are routed to different containers. A battle tested solution for this is Memcached which is available via the [MemCachier Add-on]. Refer to the [managing Add-ons](#managing-add-ons) section on how to add it. Also the [MemCachier Documentation] has detailed instructions on how to use it for your language and framework of choice.
+To make requests that can't use a cookieless domain faster, you can use in memory caching to store arbitrary data from database query results to complete http responses. Since the cloudControl routing tier distributes requests accross all available containers it is recommended to cache data in a way that the cache is also available for requests that are routed to different containers. A battle tested solution for this is Memcached which is available via the [MemCachier Add-on]. Refer to the [managing Add-ons](#managing-add-ons) section on how to add it. Also the [MemCachier Documentation] has detailed instructions on how to use it for your language and framework of choice.
 
 
 ### Cache Breakers
 
 When caching requests on client side or in a caching proxy, the URL is usually used as the cache identifier. As long as the URL stays the same and the cached response has not expired, the request is answered from cache. As part of every deployment all containers are started from a clean image. This ensures that all containers have the latest app code including templates, css, image and javascript files. But when using far future expire headers as recommended above this doesn't change anything if the response was cached at client or loadbalancer level. To ensure clients get the latest and greatest version it is recommend to include a changing parameter into the URL. This is commonly referred to as a cache breaker.
 
-As part of the set of [environment variables](#environment-variables) in the deployment runtime environment the DEP_VERSION is made available to the app. If you want to force a refresh of the cache when a new version is deployed you can use the DEP_VERSION to accomplish this.
+The [environment variables](#environment-variables) of the deployment runtime environment contain the DEP_VERSION of the app. If you want to force a refresh of the cache when a new version is deployed you can use the DEP_VERSION to accomplish this.
 
 This technique works for URLs as well as for the keys in in-memory caches like `Memcached`.
 Imagine you have cached values in Memcached that you want to keep between deploys and have values in Memcached that you want refreshed for each new version.
 Since Memcached only allows flushing the complete cache you would lose all cached values.
-Including the DEP_VERSION as in the key is an easy way to ensure that the cache gets refreshed.
+Including the DEP_VERSION in the key is an easy way to ensure that the cache is clear for new version without flushing.
 
 ## Scheduled Jobs and Background Workers
 
@@ -606,14 +606,14 @@ For tasks that are guaranteed to finish within the timelimit, the [Cron add-on] 
 
 ### Workers
 
-Tasks that will take longer than 120s to execute or that are triggered by a user request and should be handled asyncronously to not keep the user waiting are best handled by the [Worker add-on]. Workers are long running processes started in containers just like the web processes but are not listening on any port and therefore do not receive http requests. You can use workers to e.g. poll a queue and execute tasks in the background or handle long running periodical calculations. More details on usage scenarios and available queuing add-ons are available as part of the [Worker add-on documentation].
+Tasks that will take longer than 120s to execute or that are triggered by a user request and should be handled asyncronously to not keep the user waiting are best handled by the [Worker add-on]. Workers are long running processes started in containers. Just like the web processes but they are not listening on any port and therefore do not receive http requests. You can use workers to e.g. poll a queue and execute tasks in the background or handle long running periodical calculations. More details on usage scenarios and available queuing add-ons are available as part of the [Worker add-on documentation].
 
 
 ## Secure Shell (SSH)
 
 The distributed nature of the cloudControl platform means it's not possible to SSH into the actual server. Instead, we offer the run command, that allows to launch a new container and connect to that via SSH.
 
-The container is identical to the web or worker containers but starts an SSH daemon instead of one of the Procfile commands. Its based on the same stack image and deployment image and does also provides the Add-on credentials.
+The container is identical to the web or worker containers but starts an SSH daemon instead of one of the Procfile commands. It's based on the same stack image and deployment image and does also provides the Add-on credentials.
 
 ### Examples
 
@@ -686,7 +686,7 @@ Stacks are based on Ubuntu releases and have the same first letter as the releas
  * **Luigi** based on [Ubuntu 10.04 LTS Lucid Lynx]
  * **Pinky** based on [Ubuntu 12.04 LTS Precise Pangolin]
 
-You can change the stack per deployment. This is handy for testing new stacks before migrating the production deployment. Details are available via the `cctrlapp`
+You can change the stack per deployment. This is handy for testing new stacks before migrating the production deployment. Details are available via the `cctrlapp` command line interface.
 ~~~
 $ cctrlapp APP_NAME/DEP_NAME details
  name: APP_NAME/DEP_NAME
@@ -694,7 +694,7 @@ $ cctrlapp APP_NAME/DEP_NAME details
  [...]
 ~~~
 
-To change the stack of a deployment simply append the --stack command line option to the deploy command.
+To change the stack of a deployment simply append the --stack command line option to the `deploy` command.
 
 ~~~
 $ cctrlapp APP_NAME/DEP_NAME deploy --stack [luigi,pinky]
