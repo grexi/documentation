@@ -1,8 +1,8 @@
-# Deploying a Django application
+# Deploying a Django Application
 
-In this tutorial we're going to show you how to deploy a Django application on [cloudControl]. You can find the [source code on Github][example-app] and check out the [Python buildpack][python buildpack] for supported features. It is the official [Django tutorial]. The application allows to create, use and manage simple polls.
+In this tutorial we're going to show you how to deploy a Django application on [cloudControl]. You can find the [source code on Github][example-app] and check out the [Python buildpack][python buildpack] for supported features. The application follows the official [Django tutorial] and allows you to create, use and manage simple polls.
 
-## The Django application explained
+## The Django Application Explained
 
 ### Get the App
 
@@ -33,7 +33,7 @@ When asked, create an admin user. Finally, run the server locally to make sure t
 $ python manage.py runserver
 ~~~
 
-Now you can access [/polls](http://localhost:8000/polls/) or [/admin](http://localhost:8000/admin/) to test the app locally. It's time to prepare it for deployment on our platform.
+Now you can access `http://localhost:8000/polls/` or `http://localhost:8000/admin/` to test the app locally. It's time to prepare it for deployment on our platform.
 
 ### Dependency Tracking
 
@@ -43,7 +43,7 @@ The Python buildpack tracks dependencies via [pip] and the `requirements.txt` fi
 Django==1.4.3
 ~~~
 
-### Production server
+### Production Server
 
 In a production environment you normally don't want to use the development server. In this tutorial you are going to use [gunicorn] as the production server. To do so, add the following line to the `requirements.txt` file:
 
@@ -71,7 +71,7 @@ web: python manage.py run_gunicorn -b 0.0.0.0:$PORT
 
 Left from the colon we specified the **required** process type called `web` followed by the command that starts the app and listens on the port specified by the environment variable `$PORT`.
 
-### Production database
+### Production Database
 
 Now it's time to configure the production database. The application currently uses SQLite as the database in all environments, even the production one. It is not possible to use a SQLite database on cloudControl because the filesystem is [not persistent][filesystem].
 
@@ -89,7 +89,7 @@ Next, modify the `mysite/settings.py` file to [get the MySQL credentials][get-co
 on the platform:
 
 ~~~python
-# Django settings for mysite project.
+# Django Settings for mysite Project.
 
 import os
 import json
