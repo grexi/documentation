@@ -130,7 +130,7 @@ Users
  user3                                    user3@example.com
 ~~~
 
-To add an user please use his email address. If the user has already an account at cloudcontrol, he will be added to the app immediately. Otherwise he will receive an email invitation first and will be added after activating his account.
+To add an user please use his email address. If the user has already an account at cloudcontrol, he will be added to the app immediately. Otherwise he will receive an invitation email first and will be added after activating his account.
 
 ~~~
 $ cctrlapp APP_NAME user.add user4@example.com
@@ -452,7 +452,7 @@ The `access` log shows each request to your app in an Apache compatible log form
 
 ### Error Log
 
-The `error` log shows all output your app prints to stdout, stderr and syslog. This log is probably the best place to look if your app is doing well. We also show new deployments here to give you more context but you can always refer to the [deploy log](#deploy-log) for detailed information on deploys.
+The `error` log shows all output your app prints to stdout, stderr and syslog. This log is probably the best place to look at when your app is not doing well. We also show new deployments here to give you more context but you can always refer to the [deploy log](#deploy-log) for detailed information on deploys.
 
 ### Worker Log
 
