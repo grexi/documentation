@@ -13,45 +13,19 @@ $ git clone git://github.com/cloudControl/python-django-example-app.git
 $ cd python-django-example-app
 ~~~
 
-### Optional: Start the App Locally Using Built-In Server
-
-Install Django:
-
-~~~bash
-$ sudo pip install Django==1.4.3
-~~~
-
-Prepare the database by running:
-
-~~~bash
-$ python manage.py syncdb
-~~~
-
-When asked, create an admin user. Finally, run the server locally to make sure that the app is working:
-
-~~~bash
-$ python manage.py runserver
-~~~
-
-Now you can access `http://localhost:8000/polls/` or `http://localhost:8000/admin/` to test the app locally. It's time to prepare it for deployment on our platform.
-
 ### Dependency Tracking
 
-The Python buildpack tracks dependencies via [pip] and the `requirements.txt` file. It needs to be placed in the root directory of your repository. Create a `requirements.txt` file with the following content:
+The Python buildpack tracks dependencies via [pip] and the `requirements.txt` file. It needs to be placed in the root directory of your repository. The example app specifies [Django][django], [MySQL driver][mysql-driver] and [gunicorn] as dependencies. The one you cloned as part of the example app looks like this:
 
 ~~~
 Django==1.4.3
+gunicorn==0.17.2
+MySQL-python==1.2.4
 ~~~
 
 ### Production Server
 
-In a production environment you normally don't want to use the development server. In this tutorial you are going to use [gunicorn] as the production server. To do so, add the following line to the `requirements.txt` file:
-
-~~~
-gunicorn==0.17.2
-~~~
-
-And finally add `gunicorn` to the list of installed applications (`INSTALLED_APPS` in `mysite/settings.py`):
+In a production environment you normally don't want to use the development server. We have decided to use gunicorn for this purpose. To do so we had to include it in the list of installed applications (`INSTALLED_APPS` in `mysite/settings.py`):
 
 ~~~python
 INSTALLED_APPS = (
@@ -63,7 +37,7 @@ INSTALLED_APPS = (
 
 ### Process Type Definition
 
-cloudControl uses a [Procfile] to know how to start your processes. Create a file called `Procfile` with the following content:
+cloudControl uses a [Procfile] to know how to start your processes. The example code already includes a file called Procfile at the top level of your repository. It looks like this:
 
 ~~~
 web: python manage.py run_gunicorn -b 0.0.0.0:$PORT
@@ -73,20 +47,9 @@ Left from the colon we specified the **required** process type called `web` foll
 
 ### Production Database
 
-Now it's time to configure the production database. The application currently uses SQLite as the database in all environments, even the production one. It is not possible to use a SQLite database on cloudControl because the filesystem is [not persistent][filesystem].
+The original tutorial application uses SQLite as the database in all environments, even the production one. It is not possible to use a SQLite database on cloudControl because the filesystem is [not persistent][filesystem]. To use a database, you should choose an Add-on from [the Data Storage category][data-storage-addons]. 
 
-To use a database, you should choose an Add-on from [the Data Storage category][data-storage-addons]. Let's use the [Shared MySQL Add-on][mysqls].
-
-To do so, update `requirements.txt` to install MySQL driver:
-
-~~~
-Django==1.4.3
-gunicorn==0.17.2
-MySQL-python==1.2.4
-~~~
-
-Next, modify the `mysite/settings.py` file to [get the MySQL credentials][get-conf] when running
-on the platform:
+In this tutorial we use the [Shared MySQL Add-on][mysqls]. Have a look at `mysite/settings.py` so you can find out how to [get the MySQL credentials][get-conf] provided by MySQLs Add-on:
 
 ~~~python
 # Django Settings for mysite Project.
@@ -116,20 +79,10 @@ except KeyError, IOError:
         'NAME': '{0}/mysite.sqlite3'.format(PROJECT_ROOT),
     }
 ...
-~~~
-
-Update database configuration:
-~~~python
 DATABASES = {
     'default': db_config,
 }
-~~~
-
-Commit all changes:
-
-~~~bash
-$ git add .
-$ git commit -am "Migrate to cloudControl"
+...
 ~~~
 
 ## Pushing and Deploying your App
@@ -205,3 +158,4 @@ For additional information take a look at [Django Notes][django-notes] and other
 [worker]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#scheduled-jobs-and-background-workers
 [db-commit]: https://github.com/cloudControl/python-django-example-app/commit/983f45e46ce0707476cec167ea062e19adcb53c9
 [ssh-session]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#secure-shell-ssh
+[mysql-driver]: https://pypi.python.org/pypi/MySQL-python/1.2.4
