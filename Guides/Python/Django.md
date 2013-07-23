@@ -47,7 +47,7 @@ Left from the colon we specified the **required** process type called `web` foll
 
 ### Production Database
 
-The original tutorial application uses SQLite as the database in all environments, even the production one. It is not possible to use a SQLite database on cloudControl because the filesystem is [not persistent][filesystem]. To use a database, you should choose an Add-on from [the Data Storage category][data-storage-addons]. 
+The original tutorial application uses SQLite as the database in all environments, even the production one. It is not possible to use a SQLite database on cloudControl because the filesystem is [not persistent][filesystem]. To use a database, you should choose an Add-on from [the Data Storage category][data-storage-addons].
 
 In this tutorial we use the [Shared MySQL Add-on][mysqls]. Have a look at `mysite/settings.py` so you can find out how to [get the MySQL credentials][get-conf] provided by MySQLs Add-on:
 
