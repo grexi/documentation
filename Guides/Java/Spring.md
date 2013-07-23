@@ -1,32 +1,23 @@
 #Deploying a Spring Application
 
+In this tutorial we're going to show you how to deploy a Spring/MVC/Hibernate application on [cloudControl]. The example app is a ready to deploy project based on the [Spring Roo petclinic] example.
 
-In this tutorial we're going to show you how to create an example Spring/MVC/Hibernate application using Spring Roo. We will integrate it with the [MySQLs Add-on] and deploy it with an [embedded Jetty server] on [cloudControl]. 
+## The Spring Application Explained
 
-You can find the [source code on Github]. Check out the [buildpack-java] for supported features.
+### Get the App
 
 
-##The Spring Application Explained
-
-### Create the App
-
-Install [Spring Roo] and use the `bin/roo.sh` script to create the "Petclinic" example application:
+First, clone the Spring application from our repository:
 
 ~~~bash
-$ export PATH=SPRING_ROO_PATH/bin:$PATH
-$ mkdir PROJECTDIR; cd PROJECTDIR;
-$ roo.sh script --file clinic.roo
+$ git clone https://github.com/cloudControl/java-spring-hibernate-example-app
+$ cd java-spring-hibernate-example-app
 ~~~
 
-Generate data source configuration for [Hibernate] / MySQL
 
-~~~bash
-$ roo.sh persistence setup --provider HIBERNATE --database MYSQL
-~~~
+### Production Server
 
-###Prepare to run on Jetty
-
-The [Jetty Runner] provides a fast and easy way to run your app without maintaining a full JEE server. Simply add it to the build plugins section in your `pom.xml`:
+The [Jetty Runner] provides a fast and easy way to run your app in an application server. We've added a dependency to the build plugins section in the `pom.xml`:
 
 ~~~xml
 ...
@@ -57,9 +48,11 @@ The [Jetty Runner] provides a fast and easy way to run your app without maintain
 </build>
 ~~~
 
-###Adjust Data Source Configuration to MySQLs Add-on
 
-Go to the application context configuration file `src/main/resources/META-INF/spring/applicationContext.xml` and modify the datasource properties `username`, `password` and `url` to use the credentials provided by MySQLs Add-on:
+
+### Production Database
+
+In this tutorial we use the [Shared MySQL Add-on][MySQLs Add-on]. We have changed the `src/main/resources/META-INF/spring/applicationContext.xml` to read the [Database credentials] provided by MySQLs Add-on:
 
 ~~~xml
 <property name="url" value="jdbc:mysql://${MYSQLS_HOSTNAME}:${MYSQLS_PORT}/${MYSQLS_DATABASE}"/>
@@ -67,41 +60,28 @@ Go to the application context configuration file `src/main/resources/META-INF/sp
 <property name="password" value="${MYSQLS_PASSWORD}"/>
 ~~~
 
-###Adjust Logger Configuration
+### Adjust Logger Configuration
 
-Logging to a file is not recommended since the container's [file system] is not
-persistent. The default logger configuration -
-`src/main/resources/log4j.properties` should be modified to log either to
-`stdout/stderr` or `syslog`. Then cloudcontrol can  pick up all the messages
-and provide them to you via the [log command]. This is an example of how the
-configuration should look like:
+Logging to a file is not recommended since the container's [file system] is not persistent. 
+The default logger configuration - `src/main/resources/log4j.properties` is modified to log to `stdout/stderr`. 
+Then cloudcontrol can pick up all the messages and provide them to you via the [log command]. This is how the file looks now:
 ~~~xml
-log4j.rootLogger=DEBUG, stdout
+og4j.rootLogger=DEBUG, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-log4j.appender.stdout.layout.ConversionPattern=%p [%t] (%c) - %m%n
+log4j.appender.stdout.layout.ConversionPattern=%p [%t] (%c) - %m%n%
 ~~~
 
-###Defining the Process Type
+### Process Type Definition
 
-cloudControl uses the `Procfile` to start your application. Create the `Procfile` in your project root, pointing to the Jetty Runner:
+cloudControl uses the `Procfile` to start the application. The `Procfile` in the project root therefore specifies the command which executes the Jetty Runner:
 
 ~~~
 web: java $JAVA_OPTS -jar target/dependency/jetty-runner.jar --port $PORT target/*.war
 ~~~
 
-###Initializing Git Repository
 
-Initialize a new git repository in the project directory and commit the files you have just created.
-
-~~~bash
-$ git init
-$ git add pom.xml Procfile src
-$ git commit -am "Initial commit"
-~~~
-
-##Pushing and Deploying your App
-
+## Pushing and Deploying your App
 
 Choose a unique name (from now on called APP_NAME) for your application and create it on the cloudControl platform:
 
@@ -148,15 +128,10 @@ To ssh://APP_NAME@cloudcontrolled.com/repository.git
  * [new branch]      master -> master
 ~~~
 
-Now you need the [MySQLs Add-on] to provide a MySQL database for your deployment. Check out the marketplace for [available plans] and then add one to your application:
+Add MySQLs Add-on with free plan to your deployment and deploy it:
 
 ~~~bash
-$ cctrlapp APP_NAME/default addon.add mysqls.PLAN
-~~~
-
-Finally deploy your app:
-
-~~~bash
+$ cctrlapp APP_NAME/default addon.add mysqls.free
 $ cctrlapp APP_NAME/default deploy --max=6
 ~~~
 
@@ -165,17 +140,9 @@ The `--max=6` argument increases the container size to meet the high memory cons
 Et voila, the app is now up and running at `http[s]://APP_NAME.cloudcontrolled.com` .
 
 
-[Spring]: http://www.springsource.org/
-[embedded Jetty server]: http://jetty.codehaus.org/Jetty/
+[Spring Roo petclinic]: http://static.springsource.org/spring-roo/reference/html/intro.html#intro-exploring-sample
+[Database credentials]: Add-on%20credentials
 [Jetty Runner]: http://wiki.eclipse.org/Jetty/Howto/Using_Jetty_Runner
-[Spring Roo]: http://www.springsource.org/spring-roo
-[MySQLs Add-on]: https://www.cloudcontrol.com/add-ons/mysqls
-[cloudControl]: https://www.cloudcontrol.com/
-[source code on Github]: https://github.com/cloudControl/java-spring-hibernate-example-app
-[buildpack-java]: https://github.com/cloudControl/buildpack-java
-[MySQLs Add-on]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/MySQLs
-[available plans]: https://www.cloudcontrol.com/add-ons/mysqls
-[file system]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#non-persistent-filesystem
-[Hibernate]: http://www.hibernate.org/
-[MVC]: https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
-[log command]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#logging
+[cloudControl]: /
+[file system]: ../../Platform%20Documentation#non-persistent-filesystem
+[log command]: ../../Platform%20Documentation#logging
