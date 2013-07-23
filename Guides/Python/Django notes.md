@@ -33,3 +33,4 @@ You can't use a local SMTP server, instead choose one of our [email Add-ons][mes
 [data-storage-addons]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/
 [add-on-credentials]: https://www.cloudcontrol.com/dev-center/Guides/Python/Add-on%20credentials
 [cloudControl]: https://www.cloudcontrol.com/
+[worker]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#scheduled-jobs-and-background-workers
