@@ -2,19 +2,13 @@
 
 In this tutorial we're going to show you how to migrate an existing Rails
 application to the [cloudControl] platform. You can find the [source code on Github][example-app]
-and check out the [Ruby buildpack][ruby buildpack] for supported features.
-The application follows the official [Rails tutorial] and allows you to
-create, use and manage simple polls.
+and check out the [Ruby buildpack][ruby buildpack] for supported features. The
+application in question is a fork of Michael Hartl's [Rails tutorial]'s Sample
+App and is a Twitter clone.
 
-All the steps described in this tutorial can be followed in the git repository
-via commit history.
+## The Rails Application Explained
 
-
-## Original application
-
-The goal of this tutorial is to migrate a fully functional Rails application to
-the cloudControl Platform. The application in question is a fork of Michael Hartl's
-[Rails tutorial]'s Sample App and is a Twitter clone.
+### Get the App
 
 To start, first clone the application from the previously mentioned git repository:
 ~~~bash
@@ -25,9 +19,15 @@ $ cd ruby-rails-example-app
 Now you have the original version of the app. This version should work locally
 on you machine, but is still not ready to be deployed on the platform.
 
-Install all the necessary dependencies via `bundle install` command.
+### Dependency Tracking
 
-The app has exhaustive set of tests. Check that all the tests are
+The Ruby buildpack tracks dependencies with [RubyGems]. Those are defined in
+the Gemfile which is placed in the root directory of the project. To install
+them execute the `bundle install` command.
+
+### Testing
+
+The app has an exhaustive set of tests. Check that all the tests are
 passing locally.
 
 ~~~bash
@@ -42,17 +42,7 @@ with the app.
 $ rails s
 ~~~
 
-
 Now that the app is working, it's time to prepare it for deployment on the platform.
-
-### Creating the app
-
-Choose a unique name (from now on called APP_NAME) for your application and create
-it on the platform. Be sure that you're inside of the git repository when
-running the command:
-~~~bash
-$ cctrlapp APP_NAME create ruby
-~~~
 
 ### Defining the process type
 
@@ -156,23 +146,28 @@ production:
   password:
 ~~~
 
-Now the app is ready to be deployed on the platform.
-To do this, run the following command:
+## Pushing and Deploying your App
+
+Choose a unique name to replace the `APP_NAME` placeholder for your application
+and create it on the cloudControl platform. Be sure that you're inside the git
+repository when running the command:
+~~~bash
+$ cctrlapp APP_NAME create ruby
+~~~
+
+Push your code to the application's repository, which triggers the deployment image build process:
 ~~~bash
 $ cctrlapp APP_NAME/default push
-$ cctrlapp APP_NAME/default deploy
 ~~~
-This pushes the code to the application's repository, which creates a deployment image.
-
-You also need to run the migrations on the database, to do so, use the [run command]:
-~~~bash
-$ cctrlapp APP_NAME/default run "rake db:migrate"
-~~~
-
 
 Now deploy the app:
 ~~~bash
 $ cctrlapp APP_NAME/default deploy
+~~~
+
+You also need to run the migrations on the database, to do so, use the [run command]:
+~~~bash
+$ cctrlapp APP_NAME/default run "rake db:migrate"
 ~~~
 
 Congratulations, you should now be able to reach the app at http://APP_NAME.cloudcontrolled.com.
@@ -219,6 +214,7 @@ For additional information take a look at [Ruby on Rails notes][rails-notes] and
 other [ruby-specific documents][ruby-guides].
 
 [Ruby on Rails]: http://rubyonrails.org/
+[RubyGems]: http://rubygems.org/
 [cloudControl]: http://www.cloudcontrol.com
 [cloudControl-doc-user]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#user-accounts
 [cloudControl-doc-cmdline]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#command-line-client-web-console-and-api
