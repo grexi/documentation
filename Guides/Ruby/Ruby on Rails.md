@@ -221,7 +221,7 @@ other [ruby-specific documents][ruby-guides].
 [filesystem]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#non-persistent-filesystem
 [data-storage-addons]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/
 [postgres-addon]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/ElephantSQL
-[run command]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/SSH%20session
-[rails-notes]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/Ruby%20on%20Rails%20notes
+[run command]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/RunCommand
+[rails-notes]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/RailsNotes
 [ruby-guides]: https://www.cloudcontrol.com/dev-center/Guides/Ruby
 [gem itself]: http://rubygems.org/gems/cloudcontrol-rails
