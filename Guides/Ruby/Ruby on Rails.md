@@ -36,15 +36,19 @@ $ bundle exec rake db:test:prepare
 $ bundle exec rspec spec/
 ~~~
 
-All the test should pass at this point, so run a server locally to get acquainted
-with the app.
+All the tests should pass at this point, so  you can now run a server locally
+to get acquainted with the app.
 ~~~bash
 $ rails s
 ~~~
 
-Now that the app is working, it's time to prepare it for deployment on the platform.
+Now that the app is working, it's time to prepare it for deployment on the
+platform.
 
-### Defining the process type
+
+## Preparing the App
+
+### Process Type Definition
 
 cloudControl uses a [Procfile] to know how to start your processes.
 
@@ -53,10 +57,9 @@ Create a file called `Procfile` with the following content:
 web: bundle exec rails s -p $PORT
 ~~~
 
-This file specifies a `web` command that will be executed once the app is
-deployed. The $PORT environment variable contains the port your app needs to
-listen on.
-
+Left from the colon we specified the **required** process type called `web`
+followed by the command that starts the app and listens on the port specified
+by the environment variable `$PORT`.
 
 ### Configuring the asset pipeline
 
@@ -71,13 +74,13 @@ Now add the following code to the `config/application.rb`:
 
 
 ### Production database
+
 Now it's time to configure the production database.
 
 By default, Rails 3 uses SQLite for all the databases, even the production one.
-It is not possible to use SQLite in production environment on the platform,
-reason being the [Non Persistent Filesystem][filesystem].
-
-To use a database you should choose an Add-on from [Data Storage category][data-storage-addons].
+However, it is not possible to use SQLite in the production environment on the
+platform, reason being the [Non Persistent Filesystem][filesystem]. To use a
+database you should choose an Add-on from [Data Storage category][data-storage-addons].
 
 You can use MySQL or PostgreSQL databases. The following section shows how to use
 PostgreSQL, and the next one how to use MySQL. If you want, you can skip one of them.
@@ -120,7 +123,7 @@ end
 
 group :production do
   gem 'pg'
-  gem 'cloudcontrol-rails', '0.0.5'
+  gem 'cloudcontrol-rails', '0.0.6'
 end
 
 group :assets do
@@ -131,7 +134,11 @@ end
 
 gem 'jquery-rails'
 ~~~
-Don't forget to run the `bundle install` command.
+
+Don't forget to run the `bundle install` command after you saved your changes.
+Note that this might fail in certain operating systems due to missing
+dependencies. In that case you can ignore installing the production gems
+locally by executing `bundle install --without production`.
 
 Finally, change the "production" section of `config/database.yml` file to:
 ~~~
@@ -158,6 +165,33 @@ $ cctrlapp APP_NAME create ruby
 Push your code to the application's repository, which triggers the deployment image build process:
 ~~~bash
 $ cctrlapp APP_NAME/default push
+Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 296 bytes, done.
+Total 3 (delta 1), reused 0 (delta 0)
+
+-----> Receiving push
+-----> Installing dependencies using Bundler version 1.2.1
+       Running: bundle install --without development:test --path vendor/bundle --binstubs bin/ --deployment
+       Using rake (10.1.0)
+       Using multi_json (1.2.0)
+       ...
+       Using will_paginate (3.0.4)
+       Your bundle is complete! It was installed into ./vendor/bundle
+       Cleaning up the bundler cache.
+-----> Preparing app for Rails asset pipeline
+       Running: rake assets:precompile
+       /usr/bin/ruby1.9.1 /srv/tmp/builddir/vendor/bundle/ruby/1.9.1/bin/rake assets:precompile:nondigest RAILS_ENV=production RAILS_GROUPS=assets
+       Asset precompilation completed (3.73s)
+-----> Rails plugin injection
+       Injecting rails_log_stdout
+       Injecting rails3_serve_static_assets
+-----> Building image
+-----> Uploading image (8.7M)
+
+To ssh://APP_NAME@cloudcontrolled.com/repository.git
+ * [new branch]      master -> master
 ~~~
 
 Now deploy the app:
@@ -165,7 +199,7 @@ Now deploy the app:
 $ cctrlapp APP_NAME/default deploy
 ~~~
 
-You also need to run the migrations on the database, to do so, use the [run command]:
+You also need to run the migrations on the database - to do so, use the [run command]:
 ~~~bash
 $ cctrlapp APP_NAME/default run "rake db:migrate"
 ~~~
