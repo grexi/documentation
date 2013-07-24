@@ -1,9 +1,9 @@
 # Deploying a Ruby on Rails application
 
-In this tutorial we're going to show you how to migrate an existing Rails
+In this tutorial we're going to show you how to migrate an existing [Ruby on Rails]
 application to the [cloudControl] platform. You can find the [source code on Github][example-app]
 and check out the [Ruby buildpack][ruby buildpack] for supported features. The
-application in question is a fork of Michael Hartl's [Rails tutorial]'s Sample
+application in question is a fork of Michael Hartl's [Rails tutorial] Sample
 App and is a Twitter clone.
 
 ## The Rails Application Explained
@@ -43,7 +43,7 @@ $ rails s
 ~~~
 
 Now that the app is working, it's time to prepare it for deployment on the
-platform.
+cloudControl platform.
 
 
 ## Preparing the App
@@ -92,12 +92,12 @@ end
 
 By default, Rails 3 uses SQLite for all the databases, even the production one.
 However, it is not possible to use SQLite in the production environment on the
-platform, reason being the [Non Persistent Filesystem][filesystem]. To use a
-database you should choose an Add-on from [Data Storage category][data-storage-addons].
+cloudControl platform, reason being the [Non Persistent Filesystem][filesystem].
+To use a database you should choose an Add-on from [Data Storage category][data-storage-addons].
 
-In this  tutorial we use PostgresSQL with the [ElephantSQLAdd-on][postres-addon].
+In this  tutorial we use PostgresSQL with the [ElephantSQLAdd-on][postgres-addon].
 Modify the `Gemfile` by moving the `sqlite3` line to ":development, :test"
-block and add a new ":production" group with 'pg' and 'cloudcontrol-rails'
+block and add a new ":production" group with 'pg' and ['cloudcontrol-rails'][gem itself]
 gems.
 
 The `Gemfile` should now have the following content:
@@ -161,7 +161,8 @@ That's all, your app is now ready to use the PostgreSQL database.
 
 ## Pushing and Deploying your App
 
-Push your code to the application's repository, which triggers the deployment image build process:
+You can now push your code to the application's repository, which triggers the
+deployment image build process:
 ~~~bash
 $ cctrlapp APP_NAME/default push
 Counting objects: 5, done.
@@ -193,10 +194,11 @@ To ssh://APP_NAME@cloudcontrolled.com/repository.git
  * [new branch]      master -> master
 ~~~
 
-Now add the free option of the ElephantSQL Add-on to the "default" deployment
-and then deploy it:
+Next, add the free option of the ElephantSQL Add-on to the "default" deployment
+and deploy it:
 ~~~bash
 $ cctrlapp APP_NAME/default addon.add elephantsql.turtle
+$ cctrlapp APP_NAME/default deploy
 ~~~
 
 Finally, you need to run the migrations on the database - to do so, use the [run command]:
@@ -204,28 +206,22 @@ Finally, you need to run the migrations on the database - to do so, use the [run
 $ cctrlapp APP_NAME/default run "rake db:migrate"
 ~~~
 
-Congratulations, you should now be able to reach the app at http://APP_NAME.cloudcontrolled.com.
+Congratulations, you are now be able to reach the app at http://APP_NAME.cloudcontrolled.com.
 
 For additional information take a look at [Ruby on Rails notes][rails-notes] and
 other [ruby-specific documents][ruby-guides].
 
 [Ruby on Rails]: http://rubyonrails.org/
-[RubyGems]: http://rubygems.org/
 [cloudControl]: http://www.cloudcontrol.com
-[cloudControl-doc-user]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#user-accounts
-[cloudControl-doc-cmdline]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#command-line-client-web-console-and-api
+[example-app]: https://github.com/cloudControl/ruby-rails-example-app
 [ruby buildpack]: https://github.com/cloudControl/buildpack-ruby
-[procfile]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#buildpacks-and-the-procfile
-[git]: https://help.github.com/articles/set-up-git
-[bundler]: http://gembundler.com/
+[Rails tutorial]: http://ruby.railstutorial.org/
+[RubyGems]: http://rubygems.org/
+[Procfile]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#buildpacks-and-the-procfile
 [filesystem]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#non-persistent-filesystem
 [data-storage-addons]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/
-[mysqls]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/MySQLs
-[gem itself]: http://rubygems.org/gems/cloudcontrol-rails
-[database-conf]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/Read%20configuration#adding-relational-databases
-[example-app]: https://github.com/cloudControl/ruby-rails-example-app
-[rails-notes]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/Ruby%20on%20Rails%20notes
-[Rails tutorial]: http://ruby.railstutorial.org/
-[postres-addon]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/ElephantSQL
-[ruby-guides]: https://www.cloudcontrol.com/dev-center/Guides/Ruby
+[postgres-addon]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/ElephantSQL
 [run command]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/SSH%20session
+[rails-notes]: https://www.cloudcontrol.com/dev-center/Guides/Ruby/Ruby%20on%20Rails%20notes
+[ruby-guides]: https://www.cloudcontrol.com/dev-center/Guides/Ruby
+[gem itself]: http://rubygems.org/gems/cloudcontrol-rails
