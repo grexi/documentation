@@ -1,19 +1,19 @@
 # Python Amazon S3 integration
 
-[Amazon S3](http://aws.amazon.com/s3/) is a Storage-as-a-Service solution. It provides a simple web service interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web.
+[Amazon S3](http://aws.amazon.com/s3/) is a Storage-as-a-Service solution. It provides a simple web service interface that can be used to store and retrieve data from anywhere on the web.
 
 ## Amazon S3 SDK
 
-There are a few python SDKs for Amazon S3, the first being the official one:
+For Python you can choose between different SDKs for Amazon S3:
 * [Amazon S3 Python SDK / boto](http://aws.amazon.com/sdkforpython/)
 * [python-s3](https://github.com/nephics/python-s3)
 * [py-mini-s3](http://code.google.com/p/pts-mini-gpl/source/browse/#svn/trunk/py-mini-s3)
 
 ## Getting started
 
-Follow the [Amazon Guide](http://docs.aws.amazon.com/AmazonS3/latest/gsg/GetStartedWithS3.html) to setup an account and get the [AWS access credentials](http://aws.amazon.com/security-credentials).
+Follow the [Amazon Guide](http://docs.aws.amazon.com/AmazonS3/latest/gsg/GetStartedWithS3.html) to setup an account and get your [AWS access credentials](http://aws.amazon.com/security-credentials).
 
-To use `AWS S3` storage in your application just specify additional dependency in your `requirements.txt`:
+To use `AWS S3` storage in your application just specify an additional dependency in your `requirements.txt`:
 
 ~~~
 boto==2.9.8
@@ -21,13 +21,13 @@ boto==2.9.8
 
 ## Example usage:
 
-First create an AWS account and make your credentials accessible by your application. The recommended way is to provide them via environment variables. To do this, use [Config Add-on](https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Deployment/Custom%20Config):
+The recommended way to provide your AWS credentials to your app is via environment variables. To do this, use the [Config Add-on](https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Deployment/Custom%20Config):
 
 ~~~bash
 $ cctrlapp APP_NAME/default addon.add config.free --AWS_SECRET_KEY=[YOUR_SECRET_KEY] --AWS_ACCESS_KEY=[YOUR_ACCESS_KEY]
 ~~~
 
-Now try out some operations on buckets and objects:
+Now let's show some operations on buckets and objects:
 
 ~~~python
 
