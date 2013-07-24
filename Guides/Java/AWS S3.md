@@ -12,7 +12,7 @@ For Java you can choose between different SDKs for Amazon S3:
 
 ## Getting started
 
-To use the official Amazon S3 SDK in your project, just specify additional Maven dependency in your `pom.xml`:
+To use the official Amazon S3 SDK in your project, just specify an additional Maven dependency in your `pom.xml`:
 
 ~~~xml
 <dependency>
