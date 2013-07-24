@@ -74,7 +74,7 @@ After this, an activation email is sent to the given email address. Click the li
 $ cctrluser activate USER_NAME ACTIVATION_CODE
 ~~~
 
-If you want to delete your user account, please use the following CLI command:
+If you want to delete your user account, please use either the *web console* or the following CLI command:
 ~~~
 $ cctrluser delete
 ~~~
