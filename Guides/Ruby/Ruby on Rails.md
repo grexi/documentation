@@ -48,6 +48,15 @@ platform.
 
 ## Preparing the App
 
+### Creating the App
+
+Choose a unique name to replace the `APP_NAME` placeholder for your application
+and create it on the cloudControl platform. Be sure that you're inside the git
+repository when running the command:
+~~~bash
+$ cctrlapp APP_NAME create ruby
+~~~
+
 ### Process Type Definition
 
 cloudControl uses a [Procfile] to know how to start your processes.
@@ -63,41 +72,35 @@ by the environment variable `$PORT`.
 
 ### Configuring the asset pipeline
 
-Now add the following code to the `config/application.rb`:
+Add the following code into the `Application` class defined in the `config/application.rb`:
 ~~~ruby
+module SampleApp
+  class Application < Rails::Application
+
+    ...
 
     # Do not initialize on precompile in the build process
     # as this can fail, e.g. if database is being accessed in the process
     # and there is no benefit in doing it in build process anyway
     config.assets.initialize_on_precompile = false if ENV['BUILDPACK_RUNNING']
+
+  end
+end
 ~~~
 
-
 ### Production database
-
-Now it's time to configure the production database.
 
 By default, Rails 3 uses SQLite for all the databases, even the production one.
 However, it is not possible to use SQLite in the production environment on the
 platform, reason being the [Non Persistent Filesystem][filesystem]. To use a
 database you should choose an Add-on from [Data Storage category][data-storage-addons].
 
-You can use MySQL or PostgreSQL databases. The following section shows how to use
-PostgreSQL, and the next one how to use MySQL. If you want, you can skip one of them.
+In this  tutorial we use PostgresSQL with the [ElephantSQLAdd-on][postres-addon].
+Modify the `Gemfile` by moving the `sqlite3` line to ":development, :test"
+block and add a new ":production" group with 'pg' and 'cloudcontrol-rails'
+gems.
 
-
-#### PostgreSQL database
-Let's use PostgresSQL with the [ElephantSQL Add-on][postres-addon].
-
-First add the free option of the Add-on to the "default" deployment:
-~~~bash
-$ cctrlapp APP_NAME/default addon.add elephantsql.turtle
-~~~
-
-Second, modify the `Gemfile` by moving the `sqlite3` line to ":development, :test" block
-and add a new ":production" group with 'pg' and 'cloudcontrol-rails' gems.
-
-Now the `Gemfile` should have the following content:
+The `Gemfile` should now have the following content:
 ~~~ruby
 source 'http://rubygems.org'
 
@@ -140,7 +143,8 @@ Note that this might fail in certain operating systems due to missing
 dependencies. In that case you can ignore installing the production gems
 locally by executing `bundle install --without production`.
 
-Finally, change the "production" section of `config/database.yml` file to:
+Additionally you have to change the "production" section of
+`config/database.yml` file to:
 ~~~
 production:
   adapter: postgresql
@@ -153,14 +157,9 @@ production:
   password:
 ~~~
 
-## Pushing and Deploying your App
+That's all, your app is now ready to use the PostgreSQL database.
 
-Choose a unique name to replace the `APP_NAME` placeholder for your application
-and create it on the cloudControl platform. Be sure that you're inside the git
-repository when running the command:
-~~~bash
-$ cctrlapp APP_NAME create ruby
-~~~
+## Pushing and Deploying your App
 
 Push your code to the application's repository, which triggers the deployment image build process:
 ~~~bash
@@ -194,55 +193,18 @@ To ssh://APP_NAME@cloudcontrolled.com/repository.git
  * [new branch]      master -> master
 ~~~
 
-Now deploy the app:
+Now add the free option of the ElephantSQL Add-on to the "default" deployment
+and then deploy it:
 ~~~bash
-$ cctrlapp APP_NAME/default deploy
+$ cctrlapp APP_NAME/default addon.add elephantsql.turtle
 ~~~
 
-You also need to run the migrations on the database - to do so, use the [run command]:
+Finally, you need to run the migrations on the database - to do so, use the [run command]:
 ~~~bash
 $ cctrlapp APP_NAME/default run "rake db:migrate"
 ~~~
 
 Congratulations, you should now be able to reach the app at http://APP_NAME.cloudcontrolled.com.
-
-
-#### MySQL database
-
-Now you're going to change the production database to MySQL.
-
-To do so, first add the Add-on. For this app, your are going to use the
-[Shared MySQL Add-on][mysqls] with the free option:
-~~~bash
-$ cctrlapp APP_NAME/default addon.add mysqls.free
-~~~
-
-You need to add the 'mysql2' gem in the Gemfile.  If you followed the previous
-section and used the PostgreSQL database, you can also remove the 'pg' gem.
-Do not forget to run the `bundle install` command.
-
-The `database.yml` needs to be modified as well. Set the production adapter to
-'mysql2'.
-
-As a final step, you can compare your working directory with the `migrated` branch
-to be sure you didn't make any mistakes along the way:
-~~~bash
-$ git diff migrated
-~~~
-
-Commit the code and push it, run the migrations and deploy the app:
-~~~bash
-$ cctrlapp APP_NAME/default push
-$ cctrlapp APP_NAME/default deploy
-~~~
-
-Don't forget to run the migrations on the database:
-~~~bash
-$ cctrlapp APP_NAME/default run "rake db:migrate"
-~~~
-
-That's all, now you app is using the MySQL database.
-
 
 For additional information take a look at [Ruby on Rails notes][rails-notes] and
 other [ruby-specific documents][ruby-guides].
