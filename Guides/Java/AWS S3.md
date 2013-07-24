@@ -4,7 +4,7 @@
 
 ## Amazon S3 SDK
 
-For Java you can choose between different SDKs for Amazon S3: 
+For Java you can choose between different SDKs for Amazon S3:
 * [Amazon S3 Java SDK](http://aws.amazon.com/sdkforjava/)
 * [JetS3t](http://jets3t.s3.amazonaws.com/index.html)
 * [s3lib](http://code.google.com/p/s3lib/)
@@ -52,7 +52,7 @@ AWSCredentials creds = new AWSCredentials(){
 // S3 client connection
 AmazonS3 s3 = new AmazonS3Client(creds);
 final String BUCKET = "testbucket" + UUID.randomUUID();
-final String KEY 	= "key";
+final String KEY    = "key";
 
 // Create bucket
 s3.createBucket(BUCKET);
