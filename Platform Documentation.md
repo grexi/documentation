@@ -117,7 +117,8 @@ Apps
 
 ### Users
 
-By adding users to an app you can grant fellow developers access to the source code in the repository, allow them to [deploy new versions](#deploying-new-versions) and modify the deployments including their [Add-ons](#managing-add-ons). Permissions are based on the user's [roles](#roles). Users can be added to applications or more fine grained to deployments of an application. 
+By adding users to an app you can grant fellow developers access to the source code in the repository, allow them to [deploy new versions](#deploying-new-versions) and modify the deployments including their [Add-ons](#managing-add-ons). Permissions are based on
+the user's [roles](#roles). Users can be added to applications or more fine grained to deployments.
 
 You can list, add and remove app users using the command line client.
 
