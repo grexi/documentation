@@ -144,8 +144,10 @@ $ cctrlapp APP_NAME user.remove user3
 
 #### Roles
 
- * **Owner**: Creating an app makes you the owner and gives you full access. The owner can not be removed from the app and gets charged for all their apps' consumption. If you plan on having multiple developers working on the same app, it's recommended to have a separate admin-like account as the owner of all your apps and add the additional developers (including yourself) separately.
- * **Developer**: The default role for users added to an app is the developer role. Developers have full access to the repository and to all deployments. Developers can add more developers or even remove existing ones. They can even delete deployments and also the app itself. Developers however can not change the associated billing account or remove the owner.
+ * **Owner**: Creating an app makes you the owner and gives you full access. The owner can not be removed from the app and gets charged for all their apps' consumption.
+ * **Admin**: The default role for users added to an app is the Admin role. Admins have full access to the repository and to all deployments. Admins can add more Admin or Read-only users or remove existing ones. They can delete deployments and even the app itself. Admins however can not change the associated billing account or remove the owner.
+ * **Read-only** The Read-only role allows you to see the application details, deployments and logs. Any update operation is forbidden.
+
 
 #### Keys
 
