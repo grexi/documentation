@@ -15,7 +15,7 @@ $ cd ruby-rails-example-app
 
 ### Dependency Tracking
 
-The Ruby buildpack tracks dependencies with [RubyGems]. Those are defined in the `Gemfile` which is placed in the root directory of your repository. The one you clone as a part of the example app looks like this:
+The Ruby buildpack tracks dependencies with [RubyGems]. Those are defined in the `Gemfile` which is placed in the root directory of your repository. The one you cloned as a part of the example app looks like this:
 
 ~~~ruby
 source 'http://rubygems.org'
@@ -56,7 +56,7 @@ gem 'jquery-rails'
 
 ### Testing
 
-The app has an exhaustive set of tests. Check that all the tests are passing locally.
+The app has an exhaustive set of tests. Check that all the tests are passing locally:
 
 ~~~bash
 $ bundle exec rake db:migrate
@@ -99,9 +99,7 @@ end
 
 By default, Rails 3 uses SQLite for all the databases, even the production one. However, it is not possible to use SQLite in the production environment on the cloudControl because filesystem is [not persistent][filesystem]. To use a database, you should choose an Add-on from [Data Storage category][data-storage-addons].
 
-In this  tutorial we use PostgresSQL with the [ElephantSQLAdd-on][postgres-addon].
-That is why we have modified the `Gemfile` by moving the `sqlite3` line to ":development, :test"
-block and added a new ":production" group with 'pg' and ['cloudcontrol-rails'][gem itself]
+In this  tutorial we use PostgresSQL with the [ElephantSQLAdd-on][postgres-addon]. That is why we have modified the `Gemfile` by moving the `sqlite3` line to ":development, :test" block and added a new ":production" group with "pg" and ["cloudcontrol-rails"][gem itself]
 gems.
 
 Additionally we have changed the "production" section of `config/database.yml` file to:
