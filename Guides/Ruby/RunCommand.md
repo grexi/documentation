@@ -1,20 +1,22 @@
-# Run command examples for ruby
+# Run Command Examples for Ruby
 
 Run command is really useful for the ruby programmers. Here are some examples how it can be used for the everyday ruby tasks such as running migrations or using rails console.
 
 To migrate database:
-~~~
-command: ctrlapp APP_NAME/DEPLOYMENT run "rake db:migrate" 
+
+~~~bash
+$ ctrlapp APP_NAME/DEP_NAME run "rake db:migrate"
 ~~~
 
 To run rails console:
-~~~
-command: cctrlapp APP_NAME/DEPLOYMENT run "rails c"
+~~~bash
+$ cctrlapp APP_NAME/DEP_NAME run "rails c"
 ~~~
 
-Here is a full example in which multiple commands are run in bash:
+Here is a full example in which multiple commands are run in remote bash session:
+
 ~~~
-$ cctrlapp APP_NAME/DEPLOYMENT run bash
+$ cctrlapp APP_NAME/DEP_NAME run bash
 Connecting...
 Warning: Permanently added '[10.250.134.126]:19845' (RSA) to the list of known hosts.
 u19845@dep8xxzcqz9-19845:~/www$ rails g scaffold Post title:string content:text
@@ -80,8 +82,9 @@ Connection to ssh.cloudcontrolled.net closed.
 ~~~
 
 The same could be accomplished if the multiple individual commands were chained:
+
 ~~~
-cctrlapp APP_NAME/DEPLOYMENT run "rails g scaffold Post title:string content:text && rake db:migrate && rails c"
+$ cctrlapp APP_NAME/DEPLOYMENT run "rails g scaffold Post title:string content:text && rake db:migrate && rails c"
 ~~~
 
 The previous example is quite artificial and it's usefulness in the real world would be questionable. The changes to the database are retained, but all the generated files are lost. Nevertheless it demonstrates more complex usage of the run command and gives a bit of insight in it's power.
