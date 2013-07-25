@@ -1,6 +1,6 @@
-# Deploying a Ruby on Rails application
+# Deploying a Ruby on Rails Application
 
-In this tutorial we're going to show you how to deploy a [Ruby on Rails] application on [cloudControl]. You can find the [source code on Github][example-app] and check out the [Ruby buildpack][ruby buildpack] for supported features. The application is a fork of Michael Hartl's [Rails tutorial] Sample App which is a Twitter clone.
+In this tutorial we're going to show you how to deploy a [Ruby on Rails] application on [cloudControl]. You can find the [source code on Github][example-app] and check out the [Ruby buildpack][ruby buildpack] for supported features. The application is a fork of Michael Hartl's [Rails tutorial] sample app which is a Twitter clone.
 
 ## The Rails Application Explained
 
@@ -9,13 +9,13 @@ In this tutorial we're going to show you how to deploy a [Ruby on Rails] applica
 First, clone the Rails application from our repository on Github:
 
 ~~~bash
-$ git clone git://github.com/cloudControl/ruby-rails-example-app.git
+$ git clone https://github.com/cloudControl/ruby-rails-example-app.git
 $ cd ruby-rails-example-app
 ~~~
 
 ### Dependency Tracking
 
-The Ruby buildpack tracks dependencies with [RubyGems]. Those are defined in the `Gemfile` which is placed in the root directory of your repository. The one you cloned as a part of the example app looks like this:
+The Ruby buildpack tracks dependencies with [Bundler]. Those are defined in the `Gemfile` which is placed in the root directory of your repository. In this example app it contains:
 
 ~~~ruby
 source 'http://rubygems.org'
@@ -59,6 +59,7 @@ gem 'jquery-rails'
 The app has an exhaustive set of tests. Check that all the tests are passing locally:
 
 ~~~bash
+$ bundle install
 $ bundle exec rake db:migrate
 $ bundle exec rake db:test:prepare
 $ bundle exec rspec spec/
@@ -68,13 +69,13 @@ Now that the app is working, lets have a look at changes we have made to deploy 
 
 ### Process Type Definition
 
-cloudControl uses a [Procfile] to know how to start your processes. The example code already includes a file called Procfile at the top level of your repository. It looks like this:
+cloudControl uses a [Procfile] to know how to start your processes. The example code already includes a file called Procfile in the root of your repository. It looks like this:
 
 ~~~
 web: bundle exec rails s -p $PORT
 ~~~
 
-Left from the colon we specified the **required** process type called `web` followed by the command that starts the app and listens on the port specified by the environment variable `$PORT`.
+Left from the colon we specified the required process type called `web` followed by the command that starts the app and listens on the port specified by the environment variable `$PORT`.
 
 ### Configuring the Asset Pipeline
 
@@ -97,23 +98,19 @@ end
 
 ### Production Database
 
-By default, Rails 3 uses SQLite for all the databases, even the production one. However, it is not possible to use SQLite in the production environment on the cloudControl because filesystem is [not persistent][filesystem]. To use a database, you should choose an Add-on from [Data Storage category][data-storage-addons].
+By default, Rails 3 uses SQLite for all the environments. However, it is not recommended to use SQLite on cloudControl because the filesystem is [not persistent][filesystem]. To use a database, you should choose an Add-on from [Data Storage category][data-storage-addons].
 
-In this  tutorial we use PostgresSQL with the [ElephantSQLAdd-on][postgres-addon]. That is why we have modified the `Gemfile` by moving the `sqlite3` line to ":development, :test" block and added a new ":production" group with "pg" and ["cloudcontrol-rails"][gem itself]
-gems.
+In this tutorial we use PostgresSQL with the [ElephantSQL Add-on][postgres-addon]. This is why we have modified the `Gemfile` by moving the `sqlite3` line to ":development, :test" block and added a new ":production" group with "pg" and ["cloudcontrol-rails"][gem itself] gems.
 
-Additionally we have changed the "production" section of `config/database.yml` file to:
+Additionally we have changed the "production" section of `config/database.yml` to use the postgresql adapter:
 ~~~
 production:
   adapter: postgresql
   encoding: utf8
   pool: 5
-  host:
-  port:
-  database:
-  username:
-  password:
 ~~~
+The 'cloudcontrol-rails' gem will provide the database credentials.
+
 
 ## Pushing and Deploying your App
 
@@ -169,7 +166,7 @@ Finally, prepare the database by running migrations using the [Run command][run 
 $ cctrlapp APP_NAME/default run "rake db:migrate"
 ~~~
 
-Congratulations, you are now be able to reach the app at http://APP_NAME.cloudcontrolled.com.
+Congratulations, you can now access the app at http://APP_NAME.cloudcontrolled.com.
 
 For additional information take a look at [Ruby on Rails notes][rails-notes] and
 other [ruby-specific documents][ruby-guides].
@@ -179,7 +176,7 @@ other [ruby-specific documents][ruby-guides].
 [example-app]: https://github.com/cloudControl/ruby-rails-example-app
 [ruby buildpack]: https://github.com/cloudControl/buildpack-ruby
 [Rails tutorial]: http://ruby.railstutorial.org/
-[RubyGems]: http://rubygems.org/
+[Bundler]: http://bundler.io/
 [Procfile]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#buildpacks-and-the-procfile
 [filesystem]: https://www.cloudcontrol.com/dev-center/Platform%20Documentation#non-persistent-filesystem
 [data-storage-addons]: https://www.cloudcontrol.com/dev-center/Add-on%20Documentation/Data%20Storage/
