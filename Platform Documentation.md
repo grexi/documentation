@@ -117,30 +117,38 @@ Apps
 
 ### Users
 
-By adding users to an app you can grant fellow developers access to the source code in the repository, allow them to [deploy new versions](#deploying-new-versions) and modify the deployments including their [Add-ons](#managing-add-ons). Permissions are based on the user's [roles](#roles).
+By adding users to an app you can grant fellow developers access to the source code in the repository, allow them to [deploy new versions](#deploying-new-versions) and modify the deployments including their [Add-ons](#managing-add-ons). Permissions are based on the user's [roles](#roles). Users can be added to applications or more fine grained to deployments of an application. 
 
 You can list, add and remove app users using the command line client.
 
 ~~~
 $ cctrlapp APP_NAME user
+
 Users
- Name                                     Email
- user1                                    user1@example.com
- user2                                    user2@example.com
- user3                                    user3@example.com
+ Name		Email				 	Role		Deployment
+ user1		user1@example.com		admin		(app)
+ user2		user2@example.com		readonly	production
+ user3		user3@example.com		admin		staging
 ~~~
 
-Add a user by providing their email address. If the user is already registered they will be added to the app immediately. Otherwise they will receive an invitation email first.
+
+Add a user to an app by providing their email address. If the user is already registered they will be added to the app immediately. Otherwise they will receive an invitation email first.
 
 ~~~
 $ cctrlapp APP_NAME user.add user4@example.com
 ~~~
 
 To remove a user, please use their username.
-
 ~~~
 $ cctrlapp APP_NAME user.remove user3
 ~~~
+
+On deployment level:
+~~~
+$ cctrlapp APP_NAME/DEP_NAME user.add user5@example.com
+$ cctrlapp APP_NAME/DEP_NAME user.remove user5
+~~~
+Please note: a user can either be added to the application or to one or more deployments.
 
 #### Roles
 
