@@ -148,7 +148,7 @@ $ cctrlapp APP_NAME user.remove user3
  * **Admin**: The default role for users added to an app is the Admin role. Admins have full access to the repository and to all deployments. Admins can add more Admin or Read-only users or remove existing ones. They can delete deployments and even the app itself. Admins however can not change the associated billing account or remove the owner.
  * **Read-only** The Read-only role allows you to see the application details, deployments and logs. Any update operation is forbidden.
 
-You can provide the role with the `user.add` command. 
+You can provide the role with the `user.add` command.
 
 ~~~
 $ cctrlapp APP_NAME user.add user5@example.com --role readonly
