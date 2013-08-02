@@ -18,7 +18,7 @@ For your OPTION, select one of MongoSoup's plan offerings: small, medium, large,
 $ cctrlapp APP_NAME/DEP_NAME addon.add mongosoup.large
 ~~~
 
-When added, MongoSoup automatically creates a new user account and database in an Amazon EC2 cloud. You can manage your database and data easily from the [web console](https://console.cloudcontrolled.com/) by clicking the MongoSoup add-on entry on your app's deployment page, and you gain immediate access to MongoSoup customer support. Email [support@mongosoup.de](mailto:support@mongosoup.de) with any questions.
+When added, MongoSoup automatically creates a new user account and database in an Amazon EC2 cloud. You can manage your database and data easily from the [web console](https://www.cloudcontrol.com/console) by clicking the MongoSoup add-on entry on your app's deployment page, and you gain immediate access to MongoSoup customer support. Email [support@mongosoup.de](mailto:support@mongosoup.de) with any questions.
 
 ## Internal access credentials
 
