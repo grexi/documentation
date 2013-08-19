@@ -136,10 +136,10 @@ Add a user by providing their email address. If the user is already registered t
 $ cctrlapp APP_NAME user.add user4@example.com
 ~~~
 
-To remove a user, please use their username.
+To remove a user, provide their email address as well.
 
 ~~~
-$ cctrlapp APP_NAME user.remove user3
+$ cctrlapp APP_NAME user.remove user3@example.com
 ~~~
 
 #### Roles
